@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Amp's base orb includes these tools; this static site has no packages to install.
+echo 'Checking static-site development tools...'
+for tool in node python3 curl; do
+  if ! command -v "$tool" >/dev/null 2>&1; then
+    echo "Missing required tool: $tool (expected in the Amp base orb)." >&2
+    exit 1
+  fi
+done
+node --version
+node -e "require('node:test'); require('node:assert/strict');"
+python3 --version
+python3 -c 'import http.server'
+echo 'Setup ready. Run node --test tests/*.test.cjs tests/*.test.mjs to verify.'
+echo 'Start the preview with amp orb services ensure.'
